@@ -166,7 +166,7 @@ func handleCommand(chatId int64, text string) error {
 
 	case "/new":
 		if len(parts) < 4 {
-			err := fmt.Errorf("some of the parameters are missing. Example of command: /new IN_GAME_NICKNAME LOGIN PAYMENT_INFO")
+			err := fmt.Errorf("some of the parameters are missing. Example of command: `/new IN_GAME_NICKNAME LOGIN PAYMENT_INFO`")
 			reportErr(chatId, err)
 			return err
 		}
@@ -183,7 +183,7 @@ func handleCommand(chatId int64, text string) error {
 
 	case "/map":
 		if len(parts) < 3 {
-			err := fmt.Errorf("some of the parameters are missing. Example of command: /new IN_GAME_NICKNAME LOGIN PAYMENT_INFO")
+			err := fmt.Errorf("some of the parameters are missing. Example of command: `/map IN_GAME_NICKNAME LOGIN`")
 			reportErr(chatId, err)
 			return err
 		}
@@ -192,7 +192,7 @@ func handleCommand(chatId int64, text string) error {
 			reportErr(chatId, err)
 			return err
 		}
-		msg := tgbotapi.NewMessage(chatId, "Successfully created new user.")
+		msg := tgbotapi.NewMessage(chatId, "Successfully mapped new user.")
 		_, err = bot.Send(msg)
 		if err != nil {
 			return err

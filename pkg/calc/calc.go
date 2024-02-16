@@ -52,10 +52,12 @@ func Map(nickname string, login string, usersJsonPath string) error {
 		login = "@" + login
 	}
 	found := false
-	for _, user := range users {
+	for i := 0; i < len(users); i++ {
+		user := users[i]
 		if user.Login == login {
 			user.Nicknames = append(user.Nicknames, nickname)
 			found = true
+			users[i] = user
 			break
 		}
 	}
@@ -176,7 +178,7 @@ func getPlayersList(transactions []TransationInfo) ([]Player, error) {
 		playersMap[user.Login] = player
 	}
 	if len(missingUsers) != 0 {
-		return nil, fmt.Errorf("unknown users found: %s. Please use `/map` or `/new` commands.", strings.Join(missingUsers, ", "))
+		return nil, fmt.Errorf("unknown users found: %s\n\nPlease use `/map` or `/new` commands and relaunch command `/calc`", strings.Join(missingUsers, ", "))
 	}
 	players := []Player{}
 	for _, player := range playersMap {
