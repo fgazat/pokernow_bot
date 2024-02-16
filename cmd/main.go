@@ -238,7 +238,7 @@ func handleCommand(chatId int64, text string) error {
 // }
 
 func SendHelp(chatId int64) error {
-	msg := tgbotapi.NewMessage(chatId, "Please check the README: https://github\\.com/fgazat/pokernow")
+	msg := tgbotapi.NewMessage(chatId, "Please check the README: https://github\\.com/fgazat/pokernow_bot")
 	msg.ParseMode = tgbotapi.ModeMarkdownV2
 	_, err := bot.Send(msg)
 	return err
