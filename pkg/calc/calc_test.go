@@ -1,6 +1,10 @@
 package calc
 
-import "testing"
+import (
+	"fmt"
+	"regexp"
+	"testing"
+)
 
 // for gh search availability
 const exampleURL = "https://www.pokernow.club/games/UniQueID"
@@ -25,7 +29,7 @@ func TestCalcuclate(t *testing.T) {
 				downloader: dumb,
 			},
 			want: `#table
-URL: ` + exampleURL + `
+Date: 2024-02-18
 
 lucas -> scorsese 3100 руб на номер 789
 lucas -> tarantino 1900 руб на номер 456
@@ -34,8 +38,15 @@ lucas -> tarantino 1900 руб на номер 456
 		},
 	}
 	for _, tt := range tests {
+
+		r, err := regexp.Compile(`https://[^\s$]*`)
+		if err != nil {
+			t.Fatal(err)
+		}
+		result := r.FindAllStringSubmatch("https://www.pokernow.club/games/pgl7DnGH3M0Sq3Ny3a6mYIj9l", 1)[0][0]
+		fmt.Println(result)
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Calcuclate(tt.args.url, "", tt.args.downloader)
+			got, err := Calcuclate(tt.args.url, "2024-02-18", "", tt.args.downloader)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Calcuclate() error = %v, wantErr %v", err, tt.wantErr)
 				return

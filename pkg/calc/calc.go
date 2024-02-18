@@ -132,7 +132,7 @@ func setUsers(usersJsonPath string) error {
 	return nil
 }
 
-func Calcuclate(url string, usersJsonPath string, downloader Downloader) (string, error) {
+func Calcuclate(url string, date string, usersJsonPath string, downloader Downloader) (string, error) {
 	var err error
 	if len(users) == 0 { // for test purposes
 		if err = setUsers(usersJsonPath); err != nil {
@@ -148,7 +148,7 @@ func Calcuclate(url string, usersJsonPath string, downloader Downloader) (string
 		return "", err
 	}
 	playersList = processPlayers(playersList)
-	comment := getComment(playersList, url)
+	comment := getComment(playersList, date)
 	return comment, nil
 }
 
@@ -247,8 +247,8 @@ func getUserInfo(nickname string) *UserFromTable {
 	return nil
 }
 
-func getComment(playersList []Player, url string) string {
-	comment := "#table\nURL: " + url + "\n\n"
+func getComment(playersList []Player, date string) string {
+	comment := "#table\nDate: " + date + "\n\n"
 	items := []string{}
 	for _, player := range playersList {
 		if player.GetPaymentsComment() != "" {

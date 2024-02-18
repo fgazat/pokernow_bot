@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
+	"time"
 
 	"github.com/fgazat/poker/pkg/calc"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -117,7 +119,7 @@ func handleMessage(message *tgbotapi.Message) {
 
 	var err error
 	if strings.HasPrefix(text, "/") {
-		err = handleCommand(message.Chat.ID, text)
+		err = handleCommand(message)
 	}
 	// } else if screaming && len(text) > 0 {
 	// 	// msg := tgbotapi.NewMessage(message.Chat.ID, strings.ToUpper(text))
@@ -143,17 +145,34 @@ func reportErr(chatID int64, err error) {
 }
 
 // When we get a command, we react accordingly
-func handleCommand(chatId int64, text string) error {
+func handleCommand(message *tgbotapi.Message) error {
+	chatId := message.Chat.ID
+	text := message.Text
 	parts := strings.Split(text, " ")
 	command := parts[0]
 	switch command {
 	case "/calc":
-		if len(parts) == 1 {
-			err := fmt.Errorf("Please specify url `/calc URL`")
-			reportErr(chatId, err)
-			return err
+
+		url, date := "", ""
+		if message.ReplyToMessage != nil {
+			// fmt.Println(message.ReplyToMessage.Text)
+			date = time.Unix(int64(message.ReplyToMessage.Date), 0).Format("2006-01-02")
+			r, err := regexp.Compile(`https://[^\s$]*`)
+			if err != nil {
+				return err
+			}
+			url = r.FindAllStringSubmatch(message.ReplyToMessage.Text, 1)[0][0]
+
+		} else {
+			if len(parts) == 1 {
+				err := fmt.Errorf("Please specify url `/calc URL` or reply to message with game url.")
+				reportErr(chatId, err)
+				return err
+			}
+			url = parts[1]
+			date = time.Now().Format("2006-01-02")
 		}
-		comment, err := calc.Calcuclate(parts[1], usersJsonPath, calc.DownloadImpl{})
+		comment, err := calc.Calcuclate(url, date, usersJsonPath, calc.DownloadImpl{})
 		if err != nil {
 			reportErr(chatId, err)
 			return err
