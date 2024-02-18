@@ -149,7 +149,7 @@ func handleCommand(message *tgbotapi.Message) error {
 	chatId := message.Chat.ID
 	text := message.Text
 	parts := strings.Split(text, " ")
-	command := parts[0]
+	command := strings.Split(parts[0], "@")[0]
 	switch command {
 	case "/calc":
 
