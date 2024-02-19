@@ -157,8 +157,10 @@ func getPlayersList(transactions []TransationInfo) ([]Player, error) {
 	missingUsers := []string{}
 	for _, transaction := range transactions {
 		user := getUserInfo(transaction.PlayerNickname)
-		if user == nil && !utils.Contains(missingUsers, transaction.PlayerNickname) {
-			missingUsers = append(missingUsers, transaction.PlayerNickname)
+		if user == nil {
+			if !utils.Contains(missingUsers, transaction.PlayerNickname) {
+				missingUsers = append(missingUsers, transaction.PlayerNickname)
+			}
 			continue
 		}
 		player, ok := playersMap[user.Login]
