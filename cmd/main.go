@@ -152,7 +152,6 @@ func handleCommand(message *tgbotapi.Message) error {
 	command := strings.Split(parts[0], "@")[0]
 	switch command {
 	case "/calc":
-
 		url, date := "", ""
 		if message.ReplyToMessage != nil {
 			// fmt.Println(message.ReplyToMessage.Text)
@@ -189,7 +188,8 @@ func handleCommand(message *tgbotapi.Message) error {
 			reportErr(chatId, err)
 			return err
 		}
-		err := calc.New(parts[1], parts[2], parts[3], usersJsonPath)
+		paymentInfo := strings.Join(parts[3:], " ")
+		err := calc.New(parts[1], parts[2], paymentInfo, usersJsonPath)
 		if err != nil {
 			reportErr(chatId, err)
 			return err

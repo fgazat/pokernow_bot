@@ -1,8 +1,6 @@
 package calc
 
 import (
-	"fmt"
-	"regexp"
 	"testing"
 )
 
@@ -38,13 +36,6 @@ lucas -> tarantino 1900 руб на номер 456
 		},
 	}
 	for _, tt := range tests {
-
-		r, err := regexp.Compile(`https://[^\s$]*`)
-		if err != nil {
-			t.Fatal(err)
-		}
-		result := r.FindAllStringSubmatch("https://www.pokernow.club/games/pgl7DnGH3M0Sq3Ny3a6mYIj9l", 1)[0][0]
-		fmt.Println(result)
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Calcuclate(tt.args.url, "2024-02-18", "", tt.args.downloader)
 			if (err != nil) != tt.wantErr {
